@@ -3,16 +3,16 @@ setTimeout(function(){
   }, 1500)
 
 
+//Redireccionar desde boton home
 const redirect = () =>{
     window.location.href = "art.html";
 }
 
-
+//Mostrar Cards en pagina Art
 const requestInfo = async ()=>{
     const result = await fetch("https://api.artic.edu/api/v1/artworks?limit=50")
     const conversion = await result.json()
     const show = document.getElementById("main__showAll")
-    console.log(conversion)
 
     for(let info of conversion.data){
         const {id, title, image_id} = info
@@ -31,7 +31,11 @@ const requestInfo = async ()=>{
         }
 
     }
+    sliderBtn()
+}
 
+//Funcionalidad del boton para mover las cards
+let sliderBtn = ()=>{
     const slider = document.getElementById("main__showAll");
     let sliderSection = document.getElementsByClassName("main__card");
     
@@ -53,18 +57,15 @@ const requestInfo = async ()=>{
 
     btnRight.addEventListener('click', ()=>{sliderFunction("-48vw", "beforeend", sliderSection[0])})
     btnLeft.addEventListener('click', ()=>{sliderFunction("0.7vw", "afterbegin", sliderSection[sliderSection.length -1])})
-  
 }
 
-
+//Tomar informacion y filtrar por id para mostrar solo uno
 const redirectOneArt = async (id) =>{
     const result = await fetch("https://api.artic.edu/api/v1/artworks?limit=50")
     const conversion = await result.json()
     const idOne = id
     const positionOnObject = conversion.data.findIndex(el => el.id == idOne)
     localStorage.setItem('Position', JSON.stringify(positionOnObject));
-    console.log(localStorage.getItem('Position'))
-    const show = document.getElementById("main__showOne")
     
     for(let info of conversion.data){
         const {id:idArt, title, image_id, date_start, date_end,dimensions,artist_title, place_of_origin,medium_display, 
@@ -78,13 +79,11 @@ const redirectOneArt = async (id) =>{
             localStorage.setItem('OneArt', JSON.stringify(oneArray));
 
             showOne()
-            //location.href ="oneart.html";
-    
         }
     }
 }
 
-
+//Verificacion de valores en value y mostrar en ventana modal
 let showOne = ()=>{
     const show = document.getElementById("main__oneContainer")
     show.style.visibility = 'visible' 
@@ -101,18 +100,21 @@ let showOne = ()=>{
     let oneArtRequest = localStorage.getItem('OneArt')
     let {title, image_id, date_start, date_end,dimensions,artist_title, place_of_origin,medium_display, 
         credit_line, artwork_type_title,material_titles} = JSON.parse(oneArtRequest)
-        
+    let splitMaterials = material_titles.join(", ")
+    let upperCaseMaterials = splitMaterials.charAt(0).toUpperCase() + splitMaterials.slice(1)
     
     show.innerHTML = `
             <div class="oneContainer__container__img">
-                <img class="oneContainer__img"src="https://www.artic.edu/iiif/2/${image_id}/full/full/0/default.jpg" alt="">
+                <div class="oneContainer__img">
+                    <img id="one__img" class="img" src="https://www.artic.edu/iiif/2/${image_id}/full/full/0/default.jpg" alt="">
+                </div>
             </div>
             <div class="oneContainer__container__decription">
                 <h3 class="description__ttl">${title}</h3>
                 <p class="description__p">Artist</p>
                 <p class="description__p--info">${preventUndefined(artist_title)}</p>
                 <p class="description__p">Materials</p>
-                <p class="description__p--info">${preventUndefined(material_titles)}</p>
+                <p class="description__p--info">${preventUndefined(upperCaseMaterials)}</p>
                 <p class="description__p">Date Start - Date End</p>
                 <p class="description__p--info">${preventUndefined(date_start)} - ${preventUndefined(date_end)}</p>
                 <p class="description__p">Artwork type</p>
@@ -128,12 +130,36 @@ let showOne = ()=>{
                 <div class="main__oneContainer__btn" id="oneContainer__btn" style="font-family: Arial, Helvetica, sans-serif;">&#120</div>
             </div>`;
 
-    const btnBack = document.getElementById("oneContainer__btn")
-    btnBack.addEventListener('click', ()=>{
-            show.style.visibility = 'hidden' 
-        }
-    )
+
+    let displayOneImg = ()=>{
+        const show = document.getElementById("main__oneContainer__imgDisplay")
+        show.style.visibility = 'visible' 
+
+        show.innerHTML = `
+            <div class="oneContainer__container__img--display" >
+                <div class="oneContainer__img--display">
+                    <img class="img--display" id="img--display" src="https://www.artic.edu/iiif/2/${image_id}/full/full/0/default.jpg" alt="">
+                </div>
+            </div>`
+    }
+
+    const showOneImg = document.getElementById("one__img")
+    showOneImg.addEventListener('click', ()=>{displayOneImg()})
+
+    btnBack("oneContainer__btn", "main__oneContainer", "main__oneContainer__imgDisplay")
+    btnBack("main__oneContainer__imgDisplay", "main__oneContainer__imgDisplay")
 }
 
+//Ocultar ventanas modal
+let btnBack = (idEvent, idContenedor, idContenedor2)=>{
+    let showEvent = document.getElementById(idEvent)
+    let showHidden = document.getElementById(idContenedor)
+    let extraHidden = document.getElementById(idContenedor2)
+
+    showEvent.addEventListener('click', ()=>{
+        showHidden.style.visibility = 'hidden' 
+        extraHidden.style.visibility = 'hidden' 
+    }
+)}
 
 requestInfo()

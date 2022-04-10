@@ -229,8 +229,7 @@ body{
     margin-top: 7vh;
     background-color: rgba(0, 0, 0, 0.9);
     visibility: hidden;
-    border-radius: 20px;
-    margin-top: 10px;
+    margin-top: 20px;
     border-bottom: 2px solid #fff;
     border-right: 2px solid #fff;
 }
@@ -242,22 +241,38 @@ body{
 }
 
 .oneContainer__container__img{
-    width: 60vw;
+    width: 40vw;
     height: 90vh;
-    background-color: #fff;
-    box-shadow: 8px 8px 9px -1px rgba(0, 0, 0, 0.7);
+    background-image: url("../img/marco.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     display: flex;
     justify-content: center;
-    margin-right: 60px;
+    align-items: center;
+    margin-left: 3vw;
+    position: fixed;
 }
 
 .oneContainer__img{
-    width: 60vw;
-    object-fit: cover;
+    width: 23.9vw;
+    height: 49vh;
+    overflow: hidden;
     padding: 20px;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.img{
+
+    text-align: center;
+    padding: 20px; 
+    cursor: pointer;
+}
 .oneContainer__container__decription{
+    margin-left: 49vw;
+    margin-right: 3vw;
     height: 82.3vh;
 }
 
@@ -312,3 +327,25 @@ body{
     box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.6);
 }
 
+.main__oneContainer__imgDisplay{
+    visibility: hidden;
+}
+
+.oneContainer__container__img--display{
+    align-items: center;
+    position: absolute;
+    z-index: 5;
+}
+.oneContainer__img--display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 86vh;
+}
+
+.img--display{
+    border: 40px solid rgba(0, 0, 0, 0.9);
+    height: 91vh;
+    object-fit: cover
+}
